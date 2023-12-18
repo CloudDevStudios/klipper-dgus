@@ -15,13 +15,11 @@ else:
 
 
 def read_json_config(serial_config_json_file):
-        try:
-            with open(serial_config_json_file) as json_file:
-                json_data = json.load(json_file)
-                return json_data
-                
-        except FileNotFoundError:
-            print("Could not open: %s", serial_config_json_file)
+    try:
+        with open(serial_config_json_file) as json_file:
+            return json.load(json_file)
+    except FileNotFoundError:
+        print("Could not open: %s", serial_config_json_file)
             
 
 

@@ -374,16 +374,14 @@ class WebsocketInterface(JsonSerializable):
         return True
 
     def to_json(self):
-        websocket_json = {
-            "websocket" : {
-                "ip" : self.printer_ip,
-                "port" : self.port,
-                "printer_objects" : self.query_req["params"]["objects"],
-                "data_model" : self.json_data_modell
+        return {
+            "websocket": {
+                "ip": self.printer_ip,
+                "port": self.port,
+                "printer_objects": self.query_req["params"]["objects"],
+                "data_model": self.json_data_modell,
             }
         }
-
-        return websocket_json
 
     def _set_klippy_state(self, state : KlippyState, state_message = ""):
         self._klippy_state = state

@@ -106,9 +106,7 @@ class TuningMask(Mask):
                 break
 
         temperature_str = str(new_data, encoding='ascii')
-        temperature_str = temperature_str.replace(",",".")
-
-        return temperature_str
+        return temperature_str.replace(",",".")
     
     def z_offset_distance_changed(self, response):
         val = int.from_bytes(response[7:], byteorder='big')
@@ -260,7 +258,7 @@ class TuningMask(Mask):
 
 
     def mask_shown(self):
-        print(f"Tuning Mask is now shown")
+        print("Tuning Mask is now shown")
 
         self.run_query_slider_value = True
         self.query_slider_value_thread = Thread(target=self.query_slider_value_thread_function)
@@ -327,23 +325,22 @@ class TuningMask(Mask):
             self.write_factor_to_klipper(speed_factor_display, self.SPEED_FACTOR)
 
     def handle_extrusion_factor(self, extrusion_factor_display, extrusion_factor_klipper,  last_extrusion_factor_display, last_extrusion_factor_klipper):
-        extrusion_factor_in_display_changed = False
-        extrusion_factor_in_klipper_changed = False
-
-        if extrusion_factor_display != last_extrusion_factor_display:
-            extrusion_factor_in_display_changed = True
-
-        if extrusion_factor_klipper != last_extrusion_factor_klipper:
-            extrusion_factor_in_klipper_changed = True
-
-        if extrusion_factor_in_display_changed and extrusion_factor_in_klipper_changed:
+        extrusion_factor_in_display_changed = (
+            extrusion_factor_display != last_extrusion_factor_display
+        )
+        extrusion_factor_in_klipper_changed = (
+            extrusion_factor_klipper != last_extrusion_factor_klipper
+        )
+        if (
+            extrusion_factor_in_display_changed
+            and extrusion_factor_in_klipper_changed
+            or not extrusion_factor_in_klipper_changed
+            and extrusion_factor_in_display_changed
+        ):
             self.write_factor_to_klipper(extrusion_factor_display, self.EXTRUSION_FACTOR)
 
         elif extrusion_factor_in_klipper_changed:
             self.write_factor_to_display(DataAddress.EXTRUSION_FACTOR, extrusion_factor_klipper)
-
-        elif extrusion_factor_in_display_changed:
-            self.write_factor_to_klipper(extrusion_factor_display, self.EXTRUSION_FACTOR)
 
 
 

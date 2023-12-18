@@ -102,8 +102,8 @@ class FanMask(Mask):
 
         last_fan_speed_klipper = begin_fan_speed
         last_fan_speed_display = begin_fan_speed
-        
-        while(self.run_fan_state_query_thread):
+
+        while self.run_fan_state_query_thread:
             fan_speed_klipper = self.websock.get_klipper_data(["fan", "speed"])
             fan_speed_display = self.read_fan_speed_from_display()
 
@@ -121,15 +121,17 @@ class FanMask(Mask):
             if not math.isclose(fan_speed_klipper, last_fan_speed_klipper, rel_tol=0.1):
                 speed_in_klipper_changed = True
 
-            
+
             with self.fan_speed_mutex:
-                if speed_in_display_changed and speed_in_klipper_changed:
+                if (
+                    speed_in_display_changed
+                    and speed_in_klipper_changed
+                    or not speed_in_klipper_changed
+                    and speed_in_display_changed
+                ):
                     self.write_fan_speed_to_klipper(fan_speed_display)
                 elif speed_in_klipper_changed:
                     self.write_fan_speed_to_display(fan_speed_klipper)
-                elif speed_in_display_changed:
-                    self.write_fan_speed_to_klipper(fan_speed_display)
-            
             last_fan_speed_klipper = fan_speed_klipper
             last_fan_speed_display = fan_speed_display
 

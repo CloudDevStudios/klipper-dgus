@@ -115,11 +115,8 @@ if __name__ == "__main__":
         if openend:
             print("Serial port openend...")
             act_mask = display.get_active_mask()
-            
-            mask_idx = 0
-            if act_mask is not None:
-                mask_idx = act_mask.mask_no
-            
+
+            mask_idx = act_mask.mask_no if act_mask is not None else 0
             display.switch_to_mask(mask_idx, False)
     serial_com._serial_port_com_event_changed_receiver  = serial_port_state_changed
 
