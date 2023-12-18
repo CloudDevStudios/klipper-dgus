@@ -53,34 +53,32 @@ class MoonrakerPrintTimeTextVariable(TextVariable):
         duration = self.web_sock.get_klipper_data(["print_stats", "print_duration"])
         print_state = self.web_sock.get_klipper_data(["print_stats", "state"])
 
-        if print_state == "printing":
+        if (
+            print_state == "printing"
+            and progress >= 0.00001
+            and duration >= 0.0000001
+        ):
 
-            if progress >= 0.00001 and duration >= 0.0000001:
+            time_total = duration / progress
+            time_left = time_total - duration
 
-                time_total = duration / progress
-                time_left = time_total - duration
+            time_total_delta = timedelta(seconds=int(time_total))
+            time_left_delta = timedelta(seconds=int(time_left))
 
-                time_total_delta = timedelta(seconds=int(time_total))
-                time_left_delta = timedelta(seconds=int(time_left))
+            #time_total_delta = timedelta(seconds=int(time_total_delta.total_seconds()))
+            #time_left_delta = timedelta(seconds=int(time_left_delta.total_seconds()))
 
-                #time_total_delta = timedelta(seconds=int(time_total_delta.total_seconds()))
-                #time_left_delta = timedelta(seconds=int(time_left_delta.total_seconds()))
+            #print(f'TotalTime: {str(time_total_delta)}')
+            #print(f'Time Left: {str(time_left_delta)}')
 
-                #print(f'TotalTime: {str(time_total_delta)}')
-                #print(f'Time Left: {str(time_left_delta)}')
+            if self.time_type == PrintTimeDisplay.TOTAL_TIME:
+                text = str(time_total_delta)
 
-                if self.time_type == PrintTimeDisplay.TOTAL_TIME:
-                    text = str(time_total_delta)
-
-                if self.time_type == PrintTimeDisplay.TIME_TILL_FINISH:
-                    text = str(time_left_delta)
-            else:
-                text = "00:00:00"
-
+            if self.time_type == PrintTimeDisplay.TIME_TILL_FINISH:
+                text = str(time_left_delta)
         else:
             text = "00:00:00"
 
-        
         #text = "hase"
 
         if len(text) > self.data_length:
@@ -92,7 +90,7 @@ class MoonrakerPrintTimeTextVariable(TextVariable):
         str_data =bytearray(text.encode())
 
         chars_to_append = self.data_length - len(text)
-        
+
         while chars_to_append > 0:
             str_data.append(0x00)
             chars_to_append -= 1

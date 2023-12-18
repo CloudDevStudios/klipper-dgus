@@ -241,8 +241,11 @@ class OverviewDisplayMask(Mask):
         if self.state_change_pending:
             self._logger.debug("aborting: Last state change is still pending..")
             return
-        
-        if self.printer_state_value == PrinterState.PAUSED or self.printer_state_value == PrinterState.PRINTING:
+
+        if self.printer_state_value in [
+            PrinterState.PAUSED,
+            PrinterState.PRINTING,
+        ]:
 
             self.state_change_pending = True
 

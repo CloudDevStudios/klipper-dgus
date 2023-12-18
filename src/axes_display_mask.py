@@ -119,12 +119,11 @@ class AxesDisplayMask(Mask):
 
 
     def is_keycode_a_move_key(self, key_code):
-        is_a_movex_key = key_code == KeyCodes.MoveXMinus or key_code == KeyCodes.MoveXPlus
-        is_a_movey_key = key_code == KeyCodes.MoveYMinus or key_code == KeyCodes.MoveYPlus
-        is_a_movez_key = key_code == KeyCodes.MoveZMinus or key_code == KeyCodes.MoveZPlus
+        is_a_movex_key = key_code in [KeyCodes.MoveXMinus, KeyCodes.MoveXPlus]
+        is_a_movey_key = key_code in [KeyCodes.MoveYMinus, KeyCodes.MoveYPlus]
+        is_a_movez_key = key_code in [KeyCodes.MoveZMinus, KeyCodes.MoveZPlus]
 
-        is_a_move_key = is_a_movex_key or is_a_movey_key or is_a_movez_key
-        return is_a_move_key
+        return is_a_movex_key or is_a_movey_key or is_a_movez_key
 
     def perform_move(self, keycode):
         axe = "Y"
@@ -176,9 +175,7 @@ class AxesDisplayMask(Mask):
         self.web_socket.ws_app.send(dumps(move_cmd))
 
     def is_keycode_a_home_key(self, keycode):
-        is_a_home_key = keycode == KeyCodes.HomeAll or keycode == KeyCodes.HomeXY or keycode == KeyCodes.HomeZ
-
-        return is_a_home_key
+        return keycode in [KeyCodes.HomeAll, KeyCodes.HomeXY, KeyCodes.HomeZ]
 
     def perform_homing(self):
         home_cmd = {

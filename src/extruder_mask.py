@@ -157,14 +157,7 @@ class ExtruderMask(Mask):
         
         keycode = int.from_bytes(response[7:], byteorder='big', signed=False)
 
-        feed_amount_sign = ""
-        if keycode == KeyCodes.EXTRUDE:
-            pass
-
-        if keycode == KeyCodes.RETRACT:
-            feed_amount_sign = "-"
-            pass
-
+        feed_amount_sign = "-" if keycode == KeyCodes.RETRACT else ""
         extruder_temp = float(self.web_socket.get_klipper_data(["extruder", "temperature"]))
         min_extruder_temp = float(self.web_socket.get_klipper_data(["configfile", "settings", "extruder", "min_extrude_temp"]))
 

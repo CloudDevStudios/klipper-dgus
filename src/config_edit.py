@@ -49,9 +49,7 @@ def determine_serial_interface():
         exit(-1)
 
 
-    serial_device = f'/dev/serial/by-id/{dev}'
-
-    return serial_device
+    return f'/dev/serial/by-id/{dev}'
 
 
 def setup_printer_ip():
